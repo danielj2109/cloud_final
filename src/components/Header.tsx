@@ -16,9 +16,9 @@ export default function Header() {
       if (!user) { setCargando(false); return; }
 
       const { data } = await supabase
-        .from("usuarios")
+        .from("user_roles")
         .select("rol")
-        .eq("id", user.id)
+        .eq("user_id", user.id)
         .single();
 
       if (data?.rol === "admin") setEsAdmin(true);
