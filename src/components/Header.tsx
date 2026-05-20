@@ -3,9 +3,27 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase-client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const router = useRouter();
+  const [esAdmin, setEsAdmin] = useState(false);
+
+  useEffect(() => {
+    async function verificarRol() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data } = await supabase
+        .from("usuarios")
+        .select("rol")
+        .eq("id", user.id)
+        .single();
+
+      if (data?.rol === "admin") setEsAdmin(true);
+    }
+    verificarRol();
+  }, []);
 
   async function cerrarSesion() {
     await supabase.auth.signOut();
@@ -22,7 +40,9 @@ export default function Header() {
         <Link href="/inicio" className="text-slate-400 hover:text-white text-sm font-medium transition">Inicio</Link>
         <Link href="/historial" className="text-slate-400 hover:text-white text-sm font-medium transition">Historial</Link>
         <Link href="/metricas" className="text-slate-400 hover:text-white text-sm font-medium transition">Métricas</Link>
-        <Link href="/admin" className="text-slate-400 hover:text-white text-sm font-medium transition">Admin</Link>
+        {esAdmin && (
+          <Link href="/admin" className="text-slate-400 hover:text-white text-sm font-medium transition">Admin</Link>
+        )}
         <button
           onClick={cerrarSesion}
           className="border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-medium px-5 py-2 rounded-xl text-sm transition"
