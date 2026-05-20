@@ -65,6 +65,12 @@ export default function RegisterPage() {
         await registrarLog(emailLimpio, "registro_fallido", false);
         setMessage(res.error.message);
       } else {
+        if (res.data.user) {
+          await supabase.from("user_roles").insert({
+            user_id: res.data.user.id,
+            rol: "user",
+          });
+        }
         await registrarLog(emailLimpio, "registro_exitoso", true);
         setMessage("Cuenta creada. Revisa tu correo para confirmar.");
         router.push("/login");
