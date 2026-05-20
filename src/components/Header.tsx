@@ -8,11 +8,12 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const router = useRouter();
   const [esAdmin, setEsAdmin] = useState(false);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     async function verificarRol() {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) { setCargando(false); return; }
 
       const { data } = await supabase
         .from("usuarios")
@@ -21,6 +22,7 @@ export default function Header() {
         .single();
 
       if (data?.rol === "admin") setEsAdmin(true);
+      setCargando(false);
     }
     verificarRol();
   }, []);
@@ -40,7 +42,7 @@ export default function Header() {
         <Link href="/inicio" className="text-slate-400 hover:text-white text-sm font-medium transition">Inicio</Link>
         <Link href="/historial" className="text-slate-400 hover:text-white text-sm font-medium transition">Historial</Link>
         <Link href="/metricas" className="text-slate-400 hover:text-white text-sm font-medium transition">Métricas</Link>
-        {esAdmin && (
+        {!cargando && esAdmin && (
           <Link href="/admin" className="text-slate-400 hover:text-white text-sm font-medium transition">Admin</Link>
         )}
         <button
