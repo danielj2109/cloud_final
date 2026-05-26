@@ -73,12 +73,4 @@ Aplicacion disponible en `http://localhost:3000`.
 4. Ejecutar deploy.
 5. Verificar flujo completo desde URL publica.
 
-## Evidencias sugeridas para entrega
 
-- URL de despliegue (Vercel o similar).
-- URL del repositorio.
-- Capturas de:
-	- Carga exitosa.
-	- Historial con metadatos.
-	- Detalle con FAQs sugeridas y validacion.
-- Explicacion corta del flujo cloud (Storage + DB + UI).
